@@ -6,7 +6,7 @@ class ClientController < ApplicationController
   
   #로그인 요청
   def login_request
-    print("로그인 요청");
+    print("로그인 요청")
     @email = params[:email]
     @password = params[:password]
     
@@ -94,6 +94,55 @@ class ClientController < ApplicationController
       render json: Foodtruck.where(:category => "#{@category}").where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%")
     end
     
+  end
+  
+  def foodtruck_list
+    render json: Foodtruck.all
+  end
+  
+  #리뷰 리스트 요청
+  def foodtruck_review_list
+    @foodtruck_id = params[:foodtruck_id]
+    
+    @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
+    
+    if @foodtruck != nil
+      render json: @foodtruck.reviews
+    else
+      render plain: false
+    end
+    
+  end
+  
+  #리뷰 저장 요청 // 중복 저장 문제 있음
+  def save_review
+    print("리뷰 저장 요청")
+    @title = params[:title]
+    @content = params[:content]
+    @rating = params[:rating]
+    @client_id = params[:client_id]
+    @foodtruck_id = params[:foodtruck_id]
+    
+    @client = Client.find_by_id(@client_id)
+    @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
+    
+    if @client != nil && @foodtruck != nil
+      @review = Review.create(title: @title, content: @content, rating: @rating, client_id: @client_id, foodtruck_id: @foodtruck_id)
+    
+      if @review.save
+        @foodtruck.rating = @foodtruck.reviews.average(:rating)
+          if @foodtruck.save
+            render json: @foodtruck
+          else 
+            render plain: "false"
+          end
+      else 
+        render plain: "false"
+      end
+      
+    else 
+      render plain: "false"
+    end
   end
   
 end

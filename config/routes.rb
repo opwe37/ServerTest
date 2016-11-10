@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get 'client/delete_like_truck'
   get 'client/like_truck_list'
   get 'client/search_truck'
+  get 'client/foodtruck_list'
+  get 'client/save_review'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'
