@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   get 'client/search_truck'
   get 'client/foodtruck_list'
   get 'client/save_review'
+  get 'client/list_festivals'
+  get 'client/request_festival_participate'
+  post 'client/test_Json' => 'client#test_Json'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'

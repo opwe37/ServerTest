@@ -7,12 +7,7 @@ class Client < ActiveRecord::Base
                     
     has_secure_password
     
-    #has_many :foodtrucks
-    #belongs_to :foodtruck
-    
-    #has_many :likes
-    #has_many :liked_foodtrucks, through: :foodtrucks, source: :foodtruck
-    
     has_and_belongs_to_many :foodtrucks, -> { uniq }
     has_many :reivews
+    has_many :festivals
 end

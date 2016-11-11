@@ -117,6 +117,7 @@ class ClientController < ApplicationController
   #리뷰 저장 요청 // 중복 저장 문제 있음
   def save_review
     print("리뷰 저장 요청")
+    
     @title = params[:title]
     @content = params[:content]
     @rating = params[:rating]
@@ -141,6 +142,56 @@ class ClientController < ApplicationController
       end
       
     else 
+      render plain: "false"
+    end
+  end
+  
+  def list_festivals
+    print("행사 리스트 요청")
+    
+    render json: Festival.all
+  end
+  
+  #행사 관련 요청
+  def request_festival_participate
+    @request_type = params[:request_type]
+    @owner = Owner.find_by_id(params[:owner_id])
+    @festival = Festival.find_by_id(params[:festival_id])
+    
+    if @owner != nil && @festival != nil
+      if @request_type == "1"
+        @owner.festivals<<@festival
+        if @owner.save
+          render plain: "true"
+        else
+          render plain: "false"
+        end
+      elsif @request_type == "2"
+        @owner.festivals.delete(@festival)
+        if @owner.save
+          render plain: "true"
+        else
+          render plain: "false"
+        end
+      else
+        render plain: "false"
+      end
+    else
+      render plain: "false"
+    end
+  end
+  
+  def save_festival
+  end
+  
+  def test_Json
+    @p = params[:Client]
+    
+    @a = Client.create(@p.to_json)
+    
+    if @a.save
+      render json: @a
+    else
       render plain: "false"
     end
   end

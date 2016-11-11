@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109142916) do
+ActiveRecord::Schema.define(version: 20161110140459) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -31,6 +31,26 @@ ActiveRecord::Schema.define(version: 20161109142916) do
     t.integer "foodtruck_id", null: false
   end
 
+  create_table "festivals", force: :cascade do |t|
+    t.string   "title"
+    t.string   "place"
+    t.string   "period"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "truck_num"
+    t.integer  "support_type"
+    t.text     "condition"
+    t.binary   "image"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "client_id"
+  end
+
+  create_table "festivals_owners", id: false, force: :cascade do |t|
+    t.integer "owner_id",    null: false
+    t.integer "festival_id", null: false
+  end
+
   create_table "foodtrucks", force: :cascade do |t|
     t.string   "name"
     t.string   "category"
@@ -46,13 +66,15 @@ ActiveRecord::Schema.define(version: 20161109142916) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "client_id"
+    t.integer  "owner_id"
   end
 
-  create_table "likes", force: :cascade do |t|
-    t.integer  "client_id"
-    t.integer  "foodtruck_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+  create_table "owners", force: :cascade do |t|
+    t.string   "email"
+    t.string   "password_digest"
+    t.string   "phone_number"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "reviews", force: :cascade do |t|
