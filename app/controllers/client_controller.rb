@@ -184,16 +184,4 @@ class ClientController < ApplicationController
   def save_festival
   end
   
-  def test_Json
-    @p = params[:Client]
-    
-    @a = Client.create(@p.to_json)
-    
-    if @a.save
-      render json: @a
-    else
-      render plain: "false"
-    end
-  end
-  
 end
