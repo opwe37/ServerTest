@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   get 'client/foodtruck_list'
   get 'client/save_review'
   get 'client/list_festivals'
-  get 'client/request_festival_participate'
+  get 'client/save_festival'
+  
+  get 'owner/request_festival'
+  get 'owner/request_cancle_festival'
+  get 'owner/owner_join'
+  get 'owner/truck_info_save'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'

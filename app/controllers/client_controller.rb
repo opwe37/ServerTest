@@ -152,36 +152,25 @@ class ClientController < ApplicationController
     render json: Festival.all
   end
   
-  #행사 관련 요청
-  def request_festival_participate
-    @request_type = params[:request_type]
-    @owner = Owner.find_by_id(params[:owner_id])
-    @festival = Festival.find_by_id(params[:festival_id])
-    
-    if @owner != nil && @festival != nil
-      if @request_type == "1"
-        @owner.festivals<<@festival
-        if @owner.save
-          render plain: "true"
-        else
-          render plain: "false"
-        end
-      elsif @request_type == "2"
-        @owner.festivals.delete(@festival)
-        if @owner.save
-          render plain: "true"
-        else
-          render plain: "false"
-        end
-      else
-        render plain: "false"
-      end
-    else
-      render plain: "false"
-    end
-  end
-  
+  #행사 공고 요청
   def save_festival
+    @title = params[:title]
+    @place = params[:place]
+    @period = params[:period]
+    @s_date = params[:start_date]
+    @e_date = params[:end_date]
+    @client_id = params[:client_id]
+    @support_type = params[:support_type]
+    @condition = params[:condition]
+    @image = params[:image]
+    
+    @new_festival = Festival.create(title: @title, place: @place, period: @period, start_date: @s_date, end_date: @e_date, client_id: @client_id, condition: @condition, image: @image)
+    
+    if @new_festival.save
+      render json: @new_festival
+    else
+      render nil
+    end
   end
   
 end
