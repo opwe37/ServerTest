@@ -36,9 +36,10 @@ class OwnerController < ApplicationController
     @festival = Festival.find_by_id(params[:festival_id])
     
     if @owner != nil && @festival != nil
-        @owner.festivals<<@festival
-        if @owner.save
-          render plain: "true"
+        @festival.owners<<@owner
+        if @festival.save
+          
+          render :json => @festival.as_json()
         else
           render plain: "false"
         end
@@ -63,5 +64,5 @@ class OwnerController < ApplicationController
       render plain: "false"
     end
   end
-  
+
 end
