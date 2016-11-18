@@ -28,7 +28,6 @@ class OwnerController < ApplicationController
       else
         render plain: "false"
       end
-      
   end
   
   def login_request
@@ -43,6 +42,7 @@ class OwnerController < ApplicationController
       else
         render json: nil
       end
+    end
   end
   
   
@@ -81,6 +81,35 @@ class OwnerController < ApplicationController
     end
   end
   
-  #위치공개 및 위치설정
-
+  #메뉴 정보 전송 요청
+  def menu_request
+    @foodtruck_id = params[:foodtruck_id]
+    @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
+    
+    if @foodtruck != nil
+      render json: @foodtruck.menus
+    else
+      render json: nil
+    end
+  end
+  
+  #위치 설정
+  def set_location
+    @lat = params[:lat]
+    @lng = params[:lng]
+    @foodtruck = Foodtruck.find_by_id(params[:foodtruck_id])
+    
+    if @foodtruck != nil
+      @foodtruck.lat = @lat
+      @foodtruck.lng = @lng
+      if @foodtruck.save
+        render plain: "true"
+      else
+        render plain: "false"
+      end
+    else
+      render plain: "false"
+    end
+  end
+  
 end
