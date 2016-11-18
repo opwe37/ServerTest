@@ -26,6 +26,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+#거리 계산을 위한 젬파일
+gem 'geocoder'
+gem 'geokit-rails'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

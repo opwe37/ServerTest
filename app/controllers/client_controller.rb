@@ -173,4 +173,12 @@ class ClientController < ApplicationController
     end
   end
   
+  #위치 검색 요청
+  def search_location
+    @lat = params[:lat]
+    @lng = params[:lng]
+    
+    render json: Foodtruck.within(0.5, :origin => [@lat, @lng])
+  end
+  
 end

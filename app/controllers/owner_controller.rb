@@ -28,7 +28,23 @@ class OwnerController < ApplicationController
       else
         render plain: "false"
       end
+      
   end
+  
+  def login_request
+    @email = params[:email]
+    @password = params[:password]
+    
+    @owner = Owner.find_by_email(@email)
+    
+    if @owner != nil
+      if @owner.authenticate(@password) == true
+        render json: @owner
+      else
+        render json: nil
+      end
+  end
+  
   
     #행사 신청
   def request_festival
@@ -64,5 +80,7 @@ class OwnerController < ApplicationController
       render plain: "false"
     end
   end
+  
+  #위치공개 및 위치설정
 
 end

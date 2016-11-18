@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   get 'client/save_review'
   get 'client/list_festivals'
   get 'client/save_festival'
+  get 'client/search_location'
   
+  get 'owner/login_request'
   get 'owner/request_festival'
   get 'owner/request_cancle_festival'
   get 'owner/owner_join'

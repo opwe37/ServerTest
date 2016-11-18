@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116104106) do
+ActiveRecord::Schema.define(version: 20161118071243) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -61,12 +61,12 @@ ActiveRecord::Schema.define(version: 20161116104106) do
     t.boolean  "payment_card"
     t.string   "region"
     t.binary   "truck_image"
-    t.decimal  "positionX"
-    t.decimal  "positionY"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "client_id"
     t.integer  "owner_id"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   create_table "likes", force: :cascade do |t|
