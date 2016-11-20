@@ -88,7 +88,7 @@ class ClientController < ApplicationController
     @keyword = params[:keyword]
     @category = params[:category]
     
-    if @category == "all"
+    if @category == 0
       render json: Foodtruck.where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%")
     else
       render json: Foodtruck.where(:category => "#{@category}").where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%")
@@ -97,7 +97,13 @@ class ClientController < ApplicationController
   end
   
   def foodtruck_list
-    render json: Foodtruck.all
+    @category = params[:category]
+    
+    if @category == 0
+      render json: Foodtruck.all
+    else
+      render json: Foodtruck.where(:caegory => "#{@category}")
+    end
   end
   
   #리뷰 리스트 요청
