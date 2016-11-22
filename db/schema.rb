@@ -11,19 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121135013) do
+ActiveRecord::Schema.define(version: 20161122132307) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
     t.string   "password_digest"
     t.string   "nickName"
     t.string   "membershipGrade"
-    t.decimal  "positionX"
-    t.decimal  "positionY"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.string   "phone_number"
     t.integer  "foodtruck_id"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   create_table "clients_foodtrucks", id: false, force: :cascade do |t|
@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(version: 20161121135013) do
     t.integer  "category"
     t.string   "tag"
     t.float    "rating"
-    t.integer  "like"
     t.boolean  "open"
     t.boolean  "payment_card"
     t.string   "region"
@@ -79,7 +78,7 @@ ActiveRecord::Schema.define(version: 20161121135013) do
   create_table "menus", force: :cascade do |t|
     t.string   "name"
     t.string   "price"
-    t.binary   "food_image"
+    t.string   "food_image"
     t.integer  "foodtruck_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false

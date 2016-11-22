@@ -7,4 +7,13 @@ class Foodtruck < ActiveRecord::Base
     acts_as_mappable :default_units => :kms
     
     mount_uploader :truck_image, TruckImageUploader
+    
+    def as_json(options = {})
+        super.as_json(options).merge({like: cal_like_num})
+    end
+    
+    def cal_like_num
+        self.clients.count
+    end
+    
 end

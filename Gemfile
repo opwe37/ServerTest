@@ -29,6 +29,7 @@ gem 'bcrypt', '~> 3.1.7'
 #거리 계산을 위한 젬파일
 gem 'geocoder'
 gem 'geokit-rails'
+gem 'json'
 
 #이미지 관리
 gem 'carrierwave'

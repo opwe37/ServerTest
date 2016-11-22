@@ -12,12 +12,17 @@ Rails.application.routes.draw do
   get 'client/save_festival'
   get 'client/search_location'
   
+  get 'client/foodtruck_list'
+  
   get 'owner/login_request'
   get 'owner/request_festival'
   get 'owner/request_cancle_festival'
   get 'owner/owner_join'
   get 'owner/truck_info_save'
-  post 'owner/upload' => 'owner#upload'
+  post 'owner/add_menu' => 'owner#add_menu'
+  get 'owner/add_menu'
+  
+  get 'common/truck_menus'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'

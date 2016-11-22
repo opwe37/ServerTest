@@ -80,7 +80,7 @@ class ClientController < ApplicationController
     
     @client = Client.find_by(id: params[:client_id])
     
-    render json: @client.foodtrucks
+    render :json => @client.foodtrucks.as_json()
   end
   
   #검색

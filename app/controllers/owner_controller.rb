@@ -31,98 +31,128 @@ class OwnerController < ApplicationController
   end
   
   def login_request
-    @email = params[:email]
-    @password = params[:password]
+      @email = params[:email]
+      @password = params[:password]
     
-    @owner = Owner.find_by_email(@email)
+      @owner = Owner.find_by_email(@email)
     
-    if @owner != nil
-      if @owner.authenticate(@password) == true
-        render json: @owner
-      else
-        render json: nil
+      if @owner != nil
+          if @owner.authenticate(@password) == true
+              render json: @owner
+          else
+              render json: nil
+          end
       end
-    end
   end
   
   
     #행사 신청
   def request_festival
-    @owner = Owner.find_by_id(params[:owner_id])
-    @festival = Festival.find_by_id(params[:festival_id])
+      @owner = Owner.find_by_id(params[:owner_id])
+      @festival = Festival.find_by_id(params[:festival_id])
     
-    if @owner != nil && @festival != nil
-        @festival.owners<<@owner
-        if @festival.save
-          
-          render :json => @festival.as_json()
-        else
+      if @owner != nil && @festival != nil
+          @festival.owners<<@owner
+          if @festival.save
+              render :json => @festival.as_json()
+          else
+              render plain: "false"
+          end
+      else
           render plain: "false"
-        end
-    else
-      render plain: "false"
-    end
+      end
   end
   
     #행사 신청 취소
   def request_cancle_festival
-    @owner = Owner.find_by_id(params[:owner_id])
-    @festival = Festival.find_by_id(params[:festival_id])
+      @owner = Owner.find_by_id(params[:owner_id])
+      @festival = Festival.find_by_id(params[:festival_id])
     
-    if @owner != nil && @festival != nil
-        @owner.festivals.delete(@festival)
-        if @owner.save
-          render plain: "true"
-        else
+      if @owner != nil && @festival != nil
+          @owner.festivals.delete(@festival)
+          if @owner.save
+              render plain: "true"
+          else
+              render plain: "false"
+          end
+      else
           render plain: "false"
-        end
-    else
-      render plain: "false"
-    end
+      end
   end
   
   #메뉴 정보 전송 요청
   def menu_request
-    @foodtruck_id = params[:foodtruck_id]
-    @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
+      @foodtruck_id = params[:foodtruck_id]
+      @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
     
-    if @foodtruck != nil
-      render json: @foodtruck.menus
-    else
-      render json: nil
-    end
+      if @foodtruck != nil
+          render json: @foodtruck.menus
+      else
+          render json: nil
+      end
   end
   
   #위치 설정
   def set_location
-    @lat = params[:lat]
-    @lng = params[:lng]
-    @foodtruck = Foodtruck.find_by_id(params[:foodtruck_id])
+      @lat = params[:lat]
+      @lng = params[:lng]
+      @foodtruck = Foodtruck.find_by_id(params[:foodtruck_id])
     
-    if @foodtruck != nil
-      @foodtruck.lat = @lat
-      @foodtruck.lng = @lng
-      if @foodtruck.save
-        render plain: "true"
+      if @foodtruck != nil
+          @foodtruck.lat = @lat
+          @foodtruck.lng = @lng
+          if @foodtruck.save
+              render plain: "true"
+          else
+              render plain: "false"
+          end
       else
-        render plain: "false"
+          render plain: "false"
       end
-    else
-      render plain: "false"
-    end
   end
   
-  def upload
+  #메뉴 추가
+  def add_menu
+      @menu_info = params[:menu_info]
+      @data = JSON.parse @menu_info
     
-    @image = params[:picture]
-    
-    @food = Foodtruck.find_by_id(1)
-    @food.truck_image = @image
-    @food.save
-    
-    @base64 = Base64.encode64(open("#{Rails.root}/public/uploads/foodtruck/truck_image/1/20161116_231236.jpg") { |io| io.read })
-    #print(@base64)
-    render json: @base64
-    
+      @foodtruck = Foodtruck.find_by(id: @data["foodtruck_id"])
+      
+      @menu_list = @foodtruck.menus
+      @menu_list.each { |menu| 
+          if menu.name == @data["name"]
+              render plain: false
+              return
+          else
+              next
+          end
+      }
+      
+      if @foodtruck != nil
+          @menu = Menu.new(name: @data["name"],
+                           price: @data["price"],
+                           foodtruck_id: @data["foodtruck_id"],
+                           food_image: params[:menu_image])
+          if @menu.save == true
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
   end
+  
+  #메뉴 삭제
+  def delete_menu
+      @menu = Menu.find_by(id: params[:menu_id])
+    
+      if @menu != nil
+          @menu.destroy
+          render plain: true
+      else
+          render plain: false
+      end
+  end
+  
 end
