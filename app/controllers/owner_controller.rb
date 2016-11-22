@@ -112,4 +112,17 @@ class OwnerController < ApplicationController
     end
   end
   
+  def upload
+    
+    @image = params[:picture]
+    
+    @food = Foodtruck.find_by_id(1)
+    @food.truck_image = @image
+    @food.save
+    
+    @base64 = Base64.encode64(open("#{Rails.root}/public/uploads/foodtruck/truck_image/1/20161116_231236.jpg") { |io| io.read })
+    #print(@base64)
+    render json: @base64
+    
+  end
 end

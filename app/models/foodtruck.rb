@@ -5,4 +5,6 @@ class Foodtruck < ActiveRecord::Base
     has_many :menus
     
     acts_as_mappable :default_units => :kms
+    
+    mount_uploader :truck_image, TruckImageUploader
 end

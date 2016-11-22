@@ -30,6 +30,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'geocoder'
 gem 'geokit-rails'
 
+#이미지 관리
+gem 'carrierwave'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

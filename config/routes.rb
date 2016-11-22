@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'client/delete_like_truck'
   get 'client/like_truck_list'
   get 'client/search_truck'
-  get 'client/foodtruck_list'
+  post 'client/foodtruck_list' => 'client#foodtruck_list'
   get 'client/save_review'
   get 'client/list_festivals'
   get 'client/save_festival'
@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'owner/request_cancle_festival'
   get 'owner/owner_join'
   get 'owner/truck_info_save'
+  post 'owner/upload' => 'owner#upload'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'
