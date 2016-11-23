@@ -106,20 +106,6 @@ class ClientController < ApplicationController
     end
   end
   
-  #리뷰 리스트 요청
-  def foodtruck_review_list
-    @foodtruck_id = params[:foodtruck_id]
-    
-    @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
-    
-    if @foodtruck != nil
-      render json: @foodtruck.reviews
-    else
-      render plain: false
-    end
-    
-  end
-  
   #리뷰 저장 요청 // 중복 저장 문제 있음
   def save_review
     print("리뷰 저장 요청")

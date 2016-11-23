@@ -46,6 +46,7 @@ class OwnerController < ApplicationController
   end
   
   
+  #======================= 행사 관련 =======================
     #행사 신청
   def request_festival
       @owner = Owner.find_by_id(params[:owner_id])
@@ -80,18 +81,7 @@ class OwnerController < ApplicationController
       end
   end
   
-  #메뉴 정보 전송 요청
-  def menu_request
-      @foodtruck_id = params[:foodtruck_id]
-      @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
-    
-      if @foodtruck != nil
-          render json: @foodtruck.menus
-      else
-          render json: nil
-      end
-  end
-  
+  #======================= 영업 관련 =======================
   #영업 시작 및 위치 설정
   def set_open
       @lat = params[:lat]
@@ -176,7 +166,17 @@ class OwnerController < ApplicationController
       end
   end
   
-  
+  #메뉴 정보 전송
+  def menu_request
+      @foodtruck_id = params[:foodtruck_id]
+      @foodtruck = Foodtruck.find_by_id(@foodtruck_id)
+    
+      if @foodtruck != nil
+          render json: @foodtruck.menus
+      else
+          render json: nil
+      end
+  end
   #======================== FCM 관련 =======================
   def sendfcm(user_token)
       fcm = FCM.new("AAAAVEyGzaM:APA91bEDoSERenu9Hi81R0tG5St-F-fz8zKUjd_TzRMdGEmtSVpizwFxWfifClAe4HA1A8Maxr79whYPlHV-LUS9DosU50KV8HI5Jtbi7uUMzEB_v42D9g4bZ2GHqc2N2DrppblLakbnT0Sqa2WrjUsKWLN-MDAFfQ")

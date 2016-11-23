@@ -21,10 +21,12 @@ Rails.application.routes.draw do
   get 'owner/truck_info_save'
   post 'owner/add_menu' => 'owner#add_menu'
   get 'owner/add_menu'
+  get 'owner/delete_menu'
   get 'owner/set_open'
   get 'owner/set_close'
   
   get 'common/truck_menus'
+  get 'common/foodtruck_reviews'
   
   #post 'client/login_request' => 'client#login_request'
   #post 'client/client_join' => 'client#client_join'
