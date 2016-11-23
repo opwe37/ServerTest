@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get 'owner/truck_info_save'
   post 'owner/add_menu' => 'owner#add_menu'
   get 'owner/add_menu'
+  get 'owner/set_open'
+  get 'owner/set_close'
   
   get 'common/truck_menus'
   

@@ -7,6 +7,8 @@ class Client < ActiveRecord::Base
                     
     has_secure_password
     
+    acts_as_mappable :default_units => :kms
+    
     has_and_belongs_to_many :foodtrucks, -> { uniq }
     has_many :reivews
     has_many :festivals

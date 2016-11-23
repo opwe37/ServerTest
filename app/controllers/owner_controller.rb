@@ -92,16 +92,18 @@ class OwnerController < ApplicationController
       end
   end
   
-  #위치 설정
-  def set_location
+  #영업 시작 및 위치 설정
+  def set_open
       @lat = params[:lat]
       @lng = params[:lng]
       @foodtruck = Foodtruck.find_by_id(params[:foodtruck_id])
     
       if @foodtruck != nil
+          @foodtruck.open = true
           @foodtruck.lat = @lat
           @foodtruck.lng = @lng
           if @foodtruck.save
+              sendToClientMessage(params[:foodtruck_id])
               render plain: "true"
           else
               render plain: "false"
@@ -111,6 +113,25 @@ class OwnerController < ApplicationController
       end
   end
   
+  #영업 종료 설정
+  def set_close
+      @foodtruck = Foodtruck.find_by(id: params[:foodtruck_id])
+    
+      if @foodtruck != nil
+          @foodtruck.open = false
+          @foodtruck.lat = nil
+          @foodtruck.lng = nil
+          if @foodtruck.save
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
+  end
+  
+  #======================= 메뉴 관련 =======================
   #메뉴 추가
   def add_menu
       @menu_info = params[:menu_info]
@@ -155,4 +176,30 @@ class OwnerController < ApplicationController
       end
   end
   
+  
+  #======================== FCM 관련 =======================
+  def sendfcm(user_token)
+      fcm = FCM.new("AAAAVEyGzaM:APA91bEDoSERenu9Hi81R0tG5St-F-fz8zKUjd_TzRMdGEmtSVpizwFxWfifClAe4HA1A8Maxr79whYPlHV-LUS9DosU50KV8HI5Jtbi7uUMzEB_v42D9g4bZ2GHqc2N2DrppblLakbnT0Sqa2WrjUsKWLN-MDAFfQ")
+        
+      registration_ids = user_token
+      options = {data: {msg: "푸드트럭이 도착!! 어서빨리 먹으러 가세요!"}}
+      response = fcm.send(registration_ids, options)
+        
+      puts response
+  end
+  
+  def sendToClientMessage(foodtruck_id)
+      @foodtruck = Foodtruck.find_by(id: foodtruck_id)
+      if @foodtruck != nil
+          @client_list = @foodtruck.clients
+          @fcm_list = @client_list.within(0.5, :origin => [@foodtruck.lat, @foodtruck.lng])
+          @token_list = Array.new()
+          
+          @fcm_list.each { |client|
+              @token_list.push(client.token)
+          }
+          
+          sendfcm(@token_list)
+      end
+  end
 end

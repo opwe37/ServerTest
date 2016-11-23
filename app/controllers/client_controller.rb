@@ -26,8 +26,8 @@ class ClientController < ApplicationController
   
   #회원가입 요청
   def client_join
-    new_client = Client.new(email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation], nickName: params[:nickName])
-    if new_client.save
+    @new_client = Client.new(email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation], nickName: params[:nickName])
+    if @new_client.save
       render plain: "sucess"
     else
       render plain: "false"
@@ -102,7 +102,7 @@ class ClientController < ApplicationController
     if @category == '0'
       render json: Foodtruck.all
     else
-      render json: Foodtruck.where(:caegory => "#{@category}")
+      render json: Foodtruck.where(:category => "#{@category}")
     end
   end
   
@@ -160,31 +160,68 @@ class ClientController < ApplicationController
   
   #행사 공고 요청
   def save_festival
-    @title = params[:title]
-    @place = params[:place]
-    @period = params[:period]
-    @s_date = params[:start_date]
-    @e_date = params[:end_date]
-    @client_id = params[:client_id]
-    @support_type = params[:support_type]
-    @condition = params[:condition]
-    @image = params[:image]
+      @title = params[:title]
+      @place = params[:place]
+      @period = params[:period]
+      @s_date = params[:start_date]
+      @e_date = params[:end_date]
+      @client_id = params[:client_id]
+      @support_type = params[:support_type]
+      @condition = params[:condition]
+      @image = params[:image]
     
-    @new_festival = Festival.create(title: @title, place: @place, period: @period, start_date: @s_date, end_date: @e_date, client_id: @client_id, condition: @condition, image: @image)
+      @new_festival = Festival.create(title: @title, place: @place, period: @period, start_date: @s_date, end_date: @e_date, client_id: @client_id, condition: @condition, image: @image)
     
-    if @new_festival.save
-      render json: @new_festival
-    else
-      render nil
-    end
+      if @new_festival.save
+          render json: @new_festival
+      else
+          render nil
+      end
   end
   
   #위치 검색 요청
   def search_location
-    @lat = params[:lat]
-    @lng = params[:lng]
+      @lat = params[:lat]
+      @lng = params[:lng]
     
-    render json: Foodtruck.within(0.5, :origin => [@lat, @lng])
+      render json: Foodtruck.within(0.5, :origin => [@lat, @lng])
+  end
+  
+  #fcm서비스를 위한 토큰 저장
+  def save_token
+      @token = params[:token]
+      @client = Client.find_by(id: params[:client_id])
+        
+      if @client != nil
+          @client.token = @token
+          if @client.save
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
+  end
+  
+  #소비자 위치 설정
+  def set_location
+      @lat = params[:lat]
+      @lng = params[:lng]
+      
+      @client = Client.find_by(id: params[:client_id])
+      
+      if @client != nil
+          @client.lat = @lat
+          @client.lng = @lng
+          if @client.save
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
   end
   
 end
