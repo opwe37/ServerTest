@@ -59,6 +59,9 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.7.0)
+    fcm (0.0.2)
+      httparty
+      json
     geocoder (1.4.0)
     geokit (1.10.0)
     geokit-rails (2.2.0)
@@ -66,6 +69,8 @@ GEM
       rails (>= 3.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.6.0)
       activesupport (>= 3.0.0, < 5.1)
@@ -86,6 +91,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_json (1.12.1)
+    multi_xml (0.5.5)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
@@ -163,6 +169,7 @@ DEPENDENCIES
   byebug
   carrierwave
   coffee-rails (~> 4.1.0)
+  fcm
   geocoder
   geokit-rails
   jbuilder (~> 2.0)

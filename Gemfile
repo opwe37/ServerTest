@@ -34,6 +34,9 @@ gem 'json'
 #이미지 관리
 gem 'carrierwave'
 
+#FCM
+gem 'fcm'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
