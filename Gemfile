@@ -37,6 +37,8 @@ gem 'carrierwave'
 #FCM
 gem 'fcm'
 
+gem 'whenever', :require => false
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

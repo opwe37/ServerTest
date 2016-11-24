@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   post 'client/foodtruck_list' => 'client#foodtruck_list'
   get 'client/save_review'
   get 'client/list_festivals'
-  get 'client/save_festival'
+  post 'client/save_festival' => 'client#save_festival'
   get 'client/search_location'
   
   get 'client/foodtruck_list'

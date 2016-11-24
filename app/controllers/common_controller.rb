@@ -25,4 +25,14 @@ class CommonController < ApplicationController
         end
     end
     
+    def festival_info
+        @festival_list = Festival.where('end_date > ?', DateTime.now)
+        
+        if @festival_list != nil
+            render json: @festival_list
+        else
+            render json: nil
+        end
+    end
+    
 end

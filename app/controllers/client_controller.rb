@@ -26,12 +26,18 @@ class ClientController < ApplicationController
   
   #회원가입 요청
   def client_join
-    @new_client = Client.new(email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation], nickName: params[:nickName])
-    if @new_client.save
-      render plain: "sucess"
-    else
-      render plain: "false"
-    end
+      @client_check = Clietn.find_by(email: params[:email])
+    
+      if @client_check == nil
+          @new_client = Client.new(email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation], nickName: params[:nickName])
+          if @new_client.save
+              render plain: 1
+          else
+              render plain: 2
+          end
+      else
+          render plain: 3
+      end
   end
   
   #회원등급 업데이트
@@ -146,22 +152,26 @@ class ClientController < ApplicationController
   
   #행사 공고 요청
   def save_festival
-      @title = params[:title]
-      @place = params[:place]
-      @period = params[:period]
-      @s_date = params[:start_date]
-      @e_date = params[:end_date]
-      @client_id = params[:client_id]
-      @support_type = params[:support_type]
-      @condition = params[:condition]
-      @image = params[:image]
-    
-      @new_festival = Festival.create(title: @title, place: @place, period: @period, start_date: @s_date, end_date: @e_date, client_id: @client_id, condition: @condition, image: @image)
-    
-      if @new_festival.save
-          render json: @new_festival
+      @image = params[:festival_image]
+      @festival_info = params[:festival_info]
+      @data = JSON.parse @festival_info
+      
+      @festvial = Festival.new(title: @data["title"], place: @data["place"],
+                               applicant_start: @data["applicant_start"], applicant_end: @data["applicant_end"],
+                               start_date: @data["start_date"], end_date: @data["end_date"],
+                               client_id: @data["client_id"], support_type: @data["support_type"],
+                               condition: @data["condition"], limit_num_of_application: @data["limit_num_of_application"])
+      
+      if @data["start_date"] > DateTime.now
+          @festival.status = 0
       else
-          render nil
+          @festival.status = 1
+      end
+      
+      if @festvial.save
+          render json: @festvial
+      else
+          render json: nil
       end
   end
   

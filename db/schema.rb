@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123130621) do
+ActiveRecord::Schema.define(version: 20161124174230) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -35,16 +35,18 @@ ActiveRecord::Schema.define(version: 20161123130621) do
   create_table "festivals", force: :cascade do |t|
     t.string   "title"
     t.string   "place"
-    t.date     "period"
     t.date     "start_date"
     t.date     "end_date"
-    t.integer  "truck_num"
     t.integer  "support_type"
     t.text     "condition"
-    t.binary   "image"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "image"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "client_id"
+    t.date     "applicant_start"
+    t.date     "applicant_end"
+    t.string   "status"
+    t.integer  "limit_num_of_application"
   end
 
   create_table "festivals_owners", id: false, force: :cascade do |t|
