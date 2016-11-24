@@ -156,23 +156,27 @@ class ClientController < ApplicationController
       @festival_info = params[:festival_info]
       @data = JSON.parse @festival_info
       
-      @festvial = Festival.new(title: @data["title"], place: @data["place"],
-                               applicant_start: @data["applicant_start"], applicant_end: @data["applicant_end"],
-                               start_date: @data["start_date"], end_date: @data["end_date"],
-                               client_id: @data["client_id"], support_type: @data["support_type"],
-                               condition: @data["condition"], limit_num_of_application: @data["limit_num_of_application"])
-      
-      if @data["start_date"] > DateTime.now
-          @festival.status = 0
+      if @data["applicant_end"] < DateTime.now || @data["end_date"] < DateTime.now
+          render plain: 3
       else
-          @festival.status = 1
-      end
+          @festvial = Festival.new(title: @data["title"], place: @data["place"],
+                                   applicant_start: @data["applicant_start"], applicant_end: @data["applicant_end"],
+                                   start_date: @data["start_date"], end_date: @data["end_date"],
+                                   client_id: @data["client_id"], support_type: @data["support_type"],
+                                   condition: @data["condition"], limit_num_of_application: @data["limit_num_of_application"])
       
-      if @festvial.save
-          render json: @festvial
-      else
-          render json: nil
-      end
+          if @data["start_date"] > DateTime.now
+              @festival.status = 0
+          else
+              @festival.status = 1
+          end
+      
+          if @festvial.save
+              render plain: 1
+          else
+              render plain: 2
+          end
+        end
   end
   
   #위치 검색 요청
