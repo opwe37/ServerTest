@@ -11,20 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124174230) do
+ActiveRecord::Schema.define(version: 20161125074933) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
     t.string   "password_digest"
     t.string   "nickName"
     t.string   "membershipGrade"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
     t.string   "phone_number"
-    t.integer  "foodtruck_id"
+    t.string   "image"
     t.float    "lat"
     t.float    "lng"
     t.string   "token"
+    t.integer  "foodtruck_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "clients_foodtrucks", id: false, force: :cascade do |t|
@@ -35,18 +36,18 @@ ActiveRecord::Schema.define(version: 20161124174230) do
   create_table "festivals", force: :cascade do |t|
     t.string   "title"
     t.string   "place"
+    t.string   "status"
     t.date     "start_date"
     t.date     "end_date"
-    t.integer  "support_type"
-    t.text     "condition"
-    t.string   "image"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "client_id"
     t.date     "applicant_start"
     t.date     "applicant_end"
-    t.string   "status"
+    t.integer  "support_type"
     t.integer  "limit_num_of_application"
+    t.text     "condition"
+    t.string   "image"
+    t.integer  "client_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "festivals_owners", id: false, force: :cascade do |t|
@@ -62,18 +63,11 @@ ActiveRecord::Schema.define(version: 20161124174230) do
     t.boolean  "open"
     t.boolean  "payment_card"
     t.string   "region"
-    t.string   "truck_image"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "client_id"
-    t.integer  "owner_id"
+    t.string   "image"
     t.float    "lat"
     t.float    "lng"
-  end
-
-  create_table "likes", force: :cascade do |t|
     t.integer  "client_id"
-    t.integer  "foodtruck_id"
+    t.integer  "owner_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -81,7 +75,7 @@ ActiveRecord::Schema.define(version: 20161124174230) do
   create_table "menus", force: :cascade do |t|
     t.string   "name"
     t.string   "price"
-    t.string   "food_image"
+    t.string   "image"
     t.integer  "foodtruck_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
@@ -91,15 +85,16 @@ ActiveRecord::Schema.define(version: 20161124174230) do
     t.string   "email"
     t.string   "password_digest"
     t.string   "phone_number"
+    t.string   "business_number"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.string   "business_number"
   end
 
   create_table "reviews", force: :cascade do |t|
     t.text     "title"
     t.text     "content"
     t.float    "rating"
+    t.string   "image"
     t.integer  "client_id"
     t.integer  "foodtruck_id"
     t.datetime "created_at",   null: false
