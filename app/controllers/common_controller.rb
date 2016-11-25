@@ -10,7 +10,7 @@ class CommonController < ApplicationController
         if @foodtruck != nil
             render json: @foodtruck.menus
         else
-            render plain: 'false'
+            render json: nil
         end
     end
     
@@ -21,10 +21,11 @@ class CommonController < ApplicationController
         if @foodtruck != nil
             render json: @foodtruck.reviews
         else
-            render plain: false
+            render json: nil
         end
     end
     
+    #행사 정보 전송
     def festival_info
         @festival_list = Festival.where('end_date > ?', DateTime.now)
         

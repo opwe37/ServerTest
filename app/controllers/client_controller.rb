@@ -158,6 +158,7 @@ class ClientController < ApplicationController
       
       if @data["applicant_end"] < DateTime.now || @data["end_date"] < DateTime.now
           render plain: 3
+          return
       else
           @festvial = Festival.new(title: @data["title"], place: @data["place"],
                                    applicant_start: @data["applicant_start"], applicant_end: @data["applicant_end"],
@@ -176,7 +177,7 @@ class ClientController < ApplicationController
           else
               render plain: 2
           end
-        end
+      end
   end
   
   #위치 검색 요청

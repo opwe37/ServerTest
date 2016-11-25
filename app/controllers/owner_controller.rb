@@ -9,7 +9,7 @@ class OwnerController < ApplicationController
       if @owner.save
         render json: @owner
       else
-        render plain: "false"
+        render json: nil
       end
   end
   
@@ -26,7 +26,7 @@ class OwnerController < ApplicationController
       if @foodtruck.save
         render json: @foodtruck
       else
-        render plain: "false"
+        render json: nil
       end
   end
   
@@ -57,10 +57,10 @@ class OwnerController < ApplicationController
           if @festival.save
               render :json => @festival.as_json()
           else
-              render plain: "false"
+              render json: nil
           end
       else
-          render plain: "false"
+          render json: nil
       end
   end
   
@@ -79,6 +79,10 @@ class OwnerController < ApplicationController
       else
           render plain: "false"
       end
+  end
+  
+  def select_festival_info
+    @foodtruck = Foodtruck.find_byparams[:foodtruck_id]
   end
   
   #======================= 영업 관련 =======================
