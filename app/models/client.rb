@@ -9,6 +9,8 @@ class Client < ActiveRecord::Base
     
     acts_as_mappable :default_units => :kms
     
+    mount_uploader :image, ClientImageUploader
+    
     has_and_belongs_to_many :foodtrucks, -> { uniq }
     has_many :reivews
     has_many :festivals

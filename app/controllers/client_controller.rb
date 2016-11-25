@@ -26,10 +26,15 @@ class ClientController < ApplicationController
   
   #회원가입 요청
   def client_join
-      @client_check = Clietn.find_by(email: params[:email])
+      @client_info = params[:client_info]
+      @data = JSON.parse @client_info
+      
+      @client_check = Clietn.find_by(email: @data["email"])
     
       if @client_check == nil
-          @new_client = Client.new(email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation], nickName: params[:nickName])
+          @new_client = Client.new(email: @data["email"], 
+                                   password: @data["password"], password_confirmation: @data["password"], 
+                                   nickName: @data["nickName"])
           if @new_client.save
               render plain: 1
           else
@@ -37,6 +42,19 @@ class ClientController < ApplicationController
           end
       else
           render plain: 3
+      end
+  end
+  
+  #소비자 이미지 저장
+  def upload_image
+      @client = Client.find_by(id: params[:client_id])
+      @image = params[:image]
+    
+      if @client != nil
+          @client.image = @image
+          render plain: true
+      else
+          render plain: false
       end
   end
   

@@ -147,7 +147,7 @@ class OwnerController < ApplicationController
           @menu = Menu.new(name: @data["name"],
                            price: @data["price"],
                            foodtruck_id: @data["foodtruck_id"],
-                           food_image: params[:menu_image])
+                           image: params[:menu_image])
           if @menu.save == true
               render plain: true
           else
