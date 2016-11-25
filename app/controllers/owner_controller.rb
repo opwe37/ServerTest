@@ -5,11 +5,17 @@ class OwnerController < ApplicationController
       @phone_number = params[:phone_number]
       @business_number = params[:business_number]
       
-      @owner = Owner.new(email: @email, password: @password, password_confirmation: @password, phone_number: @phone_number, business_number: @business_number)
-      if @owner.save
-        render plain: true
+      @owner_check = Owner.find_by(email: @email)
+      
+      if @owner_check == nil
+          @owner = Owner.new(email: @email, password: @password, password_confirmation: @password, phone_number: @phone_number, business_number: @business_number)
+          if @owner.save
+              render plain: 1
+          else
+              render plain: 2
+          end
       else
-        render plain: false
+          render plain: 3 
       end
   end
   

@@ -12,6 +12,6 @@ class Client < ActiveRecord::Base
     mount_uploader :image, ClientImageUploader
     
     has_and_belongs_to_many :foodtrucks, -> { uniq }
-    has_many :reivews
+    has_many :reviews
     has_many :festivals
 end

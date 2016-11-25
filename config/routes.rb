@@ -15,9 +15,11 @@ Rails.application.routes.draw do
   get 'client/foodtruck_list'
   
   get 'owner/login_request'
+  post 'owner/login_request' => 'owner#login_request'
   get 'owner/request_festival'
   get 'owner/request_cancle_festival'
   get 'owner/owner_join'
+  post 'owner/owner_join' => 'owner#owner_join'
   get 'owner/truck_info_save'
   post 'owner/add_menu' => 'owner#add_menu'
   get 'owner/add_menu'

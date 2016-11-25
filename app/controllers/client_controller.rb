@@ -205,7 +205,45 @@ class ClientController < ApplicationController
   
   #======================= 리뷰 =======================
   #리뷰 중복 검사 실시
+  def is_duplication_check
+      @client = Client.find_by(id: params[:client_id])
+      @review_list = @client.reviews
+    
+      @duplication_check = @review.find_by(id: params[:foodtruck_id])
+    
+      if @duplication_check != nil
+          render plain: true
+      else
+          render plain: false
+      end
+  end
+  
   #리뷰 업데이트(한번더 썼을 때)
+  def update_review
+      @review_info = params[:review_info]
+      @data = JSON.parse @review_info
+    
+      @client = Client.find_by_id(@data["client_id"])
+      @foodtruck = Foodtruck.find_by_id(@data["foodtruck_id"])
+    
+      if @client != nil && @foodtruck != nil
+          @update_check = Review.update(@data["foodtruck_id"], :title => @data["title"], :content => @data["content"],
+                                                               :rating => @data["rating"], :client_id => @data["client_id"], 
+                                                               :foodtruck_id => @data["foodtruck_id"], :image => params[:image])
+          if @update_check != false
+              @foodtruck.rating = @foodtruck.reviews.average(:rating)
+              if @foodtruck.save
+                  render json: @foodtruck
+              else 
+                  render json: nil
+              end
+          else 
+              render json: nil
+          end
+      else 
+          render json: nil
+      end
+  end
   
   #리뷰 저장 요청(처음 글쓸 때)
   def save_review
