@@ -5,11 +5,11 @@ class OwnerController < ApplicationController
       @phone_number = params[:phone_number]
       @business_number = params[:business_number]
       
-      @owner = Owner.create(email: @email, password: @password, password_confirmation: @password, phone_number: @phone_number, business_number: @business_number)
+      @owner = Owner.new(email: @email, password: @password, password_confirmation: @password, phone_number: @phone_number, business_number: @business_number)
       if @owner.save
-        render json: @owner
+        render plain: true
       else
-        render json: nil
+        render plain: false
       end
   end
   
@@ -22,7 +22,7 @@ class OwnerController < ApplicationController
       @truck_image = params[:truck_image]
       @owner_id = params[:owner_id]
       
-      @foodtruck = Foodtruck.create(name: @name, category: @category, tag: @tag, payment_card: @payment_card, region: @region, truck_image: @truck_image, owner_id: @owner_id)
+      @foodtruck = Foodtruck.new(name: @name, category: @category, tag: @tag, payment_card: @payment_card, region: @region, truck_image: @truck_image, owner_id: @owner_id)
       if @foodtruck.save
         render json: @foodtruck
       else
@@ -34,17 +34,64 @@ class OwnerController < ApplicationController
       @email = params[:email]
       @password = params[:password]
     
-      @owner = Owner.find_by_email(@email)
+      @owner = Owner.find_by(email: @email)
     
       if @owner != nil
-          if @owner.authenticate(@password) == true
-              render json: @owner
-          else
+          @password_check =  @owner.authenticate(@password)
+          if @password_check == false
               render json: nil
+          else
+              render json: @owner.to_json(:except => [:password_digest])
           end
       end
   end
   
+  def changeOwnerInfo
+      @request_info = params[:request_info]
+      @data = JSON.parse @request_info
+      
+      @owner = Client.find_by(id: @data["owner_id"])
+      if @owner != nil
+          @update_check = Client.update(params[:owner_id], :email => @data["email"],
+                                                           :phone_number => @data["phone_number"],
+                                                           :business_number => @data["business_number"])
+          if @update_check == false
+              render plain: 2 #정보 업데이트 실패
+          else
+              render plain: 1 #정보 업데이트 성공
+          end
+      else
+          render plain: 3 #잘못된 소비자 아이디
+      end
+  end
+  
+  #비밀번호 변경 요청
+  def change_password
+      @owner = Owner.find_by(id: params[:owner_id])
+      
+      if @owner != nil
+          @password = params[:password]
+          @update_check = Owner.update(params[:owner_id], :password => @password, :password_confirmation => @password)
+          if @update_check == false
+              render plain 2 #비밀번호 변경 실패
+          else
+              render plain 1 #비밀번호 변경 성공
+          end
+      else
+          render plain: 3 #잘못된 소비자 아이디
+      end
+  end
+  
+  # 내 푸드트럭 정보 요청
+  def mytruck_info
+      @owner = Owner.find_by(id: params[:owner_id])
+      
+      if @owner != nil
+          render json: @owner.Foodtruck
+      else
+          render json: nil
+      end
+  end
   
   #======================= 행사 관련 =======================
     #행사 신청
@@ -81,21 +128,19 @@ class OwnerController < ApplicationController
       end
   end
   
-  def select_festival_info
+  def selected_festival_info
     @foodtruck = Foodtruck.find_byparams[:foodtruck_id]
   end
   
   #======================= 영업 관련 =======================
   #영업 시작 및 위치 설정
   def set_open
-      @lat = params[:lat]
-      @lng = params[:lng]
       @foodtruck = Foodtruck.find_by_id(params[:foodtruck_id])
     
       if @foodtruck != nil
           @foodtruck.open = true
-          @foodtruck.lat = @lat
-          @foodtruck.lng = @lng
+          @foodtruck.lat = params[:lat]
+          @foodtruck.lng = params[:lng]
           if @foodtruck.save
               sendToClientMessage(params[:foodtruck_id])
               render plain: "true"
@@ -195,4 +240,5 @@ class OwnerController < ApplicationController
           sendfcm(@token_list)
       end
   end
+  
 end
