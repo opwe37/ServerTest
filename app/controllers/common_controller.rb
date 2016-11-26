@@ -19,7 +19,7 @@ class CommonController < ApplicationController
         @foodtruck = Foodtruck.find_by(id: params[:foodtruck_id])
     
         if @foodtruck != nil
-            render json: @foodtruck.reviews
+            render json: @foodtruck.reviews.order('updated_at desc')
         else
             render json: nil
         end

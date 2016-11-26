@@ -280,9 +280,29 @@ class ClientController < ApplicationController
       @image = params[:festival_image]
       @festival_info = params[:festival_info]
       @data = JSON.parse @festival_info
+        
+        #행사 중복 여부 체크
+      @festival = Festival.all
+      @festival.each { |fesival|
+          if festival.title == @data["title"]
+              if festival.status != 3 || festival.status != 4 
+                 #3,4를 제외한 0,1,2일 경우 중복된 행사
+                  render plain: 5 #중복된 행사 모집 공고
+                  return
+              end
+          end
+      }
       
+        #요청자 아이디 유효성 체크
+      @client = Client.find_by(id: params[:client_id])
+      if @client_id == nil
+          render plain: 4 #잘못된 소비자 아이디
+          return
+      end
+        
+        #행사 및 모집요청 날짜 유효성 체크하여 행사정보 저장
       if @data["applicant_end"] < DateTime.now || @data["end_date"] < DateTime.now
-          render plain: 3
+          render plain: 3 #행사 날짜가 잘못 입력되었음
           return
       else
           @festvial = Festival.new(title: @data["title"], place: @data["place"],
@@ -298,10 +318,35 @@ class ClientController < ApplicationController
           end
       
           if @festvial.save
-              render plain: 1
+              render plain: 1 #저장 성공
           else
-              render plain: 2
+              render plain: 2 #저장 실패
           end
+      end
+  end
+  
+  #소비자가 올리 행사정보 요청
+  def my_festival_info
+      @client = Client.find_by(id: params[:client_id])
+      if @client != nil
+          render json: @client.festivals.order('status asc')
+      else
+          render json: nil
+      end
+  end
+  
+  #행사 취소 (안드로이드 단에서 이미 자신이 등록한 행사정보를 알고 있으므로 행사 아이디로 취소 요청이 옴)
+  def cancle_festival
+      @festival = Festival.find_by(id: params[:festival_id])
+      if @festival != nil
+          @festival.status = 4
+          if @festival.save
+              render plain: 1 #행사 모집상태 변경 저장 성공
+          else
+              render plain: 2 #행사 모집상태 변경 저장실패
+          end
+      else
+          render plain: 3 #잘못된 행사 아이디
       end
   end
   

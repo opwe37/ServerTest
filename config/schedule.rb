@@ -24,6 +24,14 @@ set :output, {:error => "/home/ubuntu/workspace/log/cron_error_log.log", :standa
 set :job_template, "/bin/bash -i -c ':job'"
 env :PATH, ENV['PATH']
 
-every 5.minutes  do
+every 1.day, :at => '01:00 am'  do
     runner 'Festival.end_festival_destroy', :environment => 'development'
+end
+
+every 1.day, :at => '01:05 am' do
+    runner 'Festival.change_status', :environment => 'development'
+end
+
+every 1.day, :at => '04:00 am' do
+    runner 'Foodtruck.close_truck', :environment => 'development'
 end

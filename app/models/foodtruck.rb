@@ -16,4 +16,11 @@ class Foodtruck < ActiveRecord::Base
         self.clients.count
     end
     
+    def self.close_truck
+        @truck_list = Foodtruck.where(:open => true)
+        @truck_list.each { |truck|
+            truck.open = false
+            truck.save
+        }
+    end
 end

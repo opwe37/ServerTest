@@ -93,7 +93,7 @@ class OwnerController < ApplicationController
       @owner = Owner.find_by(id: params[:owner_id])
       
       if @owner != nil
-          render json: @owner.Foodtruck
+          render json: @owner.foodtruck
       else
           render json: nil
       end
