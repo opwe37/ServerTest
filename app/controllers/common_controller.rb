@@ -5,7 +5,6 @@ class CommonController < ApplicationController
         @foodtruck = Foodtruck.find_by(id: params[:foodtruck_id])
         
         @test = Client.first
-        sendfcm(@test.token)
         
         if @foodtruck != nil
             render json: @foodtruck.menus

@@ -46,6 +46,8 @@ class CreateDb < ActiveRecord::Migration
       t.string :image
       t.float :lat
       t.float :lng
+      t.string :opentime
+      t.string :closetime
       t.belongs_to :client
       t.belongs_to :owner
       
