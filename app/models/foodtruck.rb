@@ -10,10 +10,15 @@ class Foodtruck < ActiveRecord::Base
     
     def as_json(options = {})
         super.as_json(options).merge({like: cal_like_num})
+                              .merge({review_num: cal_reivew_num})
     end
     
     def cal_like_num
         self.clients.count
+    end
+    
+    def cal_reivew_num
+        self.reviews.count
     end
     
     def self.close_truck

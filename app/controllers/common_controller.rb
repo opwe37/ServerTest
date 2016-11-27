@@ -35,5 +35,4 @@ class CommonController < ApplicationController
             render json: nil
         end
     end
-    
 end

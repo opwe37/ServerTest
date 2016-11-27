@@ -140,9 +140,9 @@ class ClientController < ApplicationController
       @category = params[:category]
     
       if @category == '0'
-          render json: Foodtruck.where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%")
+          render :json => Foodtruck.where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%").as_json()
       else
-          render json: Foodtruck.where(:category => "#{@category}").where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%")
+          render :json => Foodtruck.where(:category => "#{@category}").where('name like ? OR tag like ?', "%#{@keyword}%", "%#{@keyword}%").as_json()
       end
   end
   
@@ -151,9 +151,9 @@ class ClientController < ApplicationController
       @category = params[:category]
     
       if @category == '0'
-          render json: Foodtruck.all
+          render :json => Foodtruck.all.as_json()
       else
-          render json: Foodtruck.where(:category => "#{@category}")
+          render :json  => Foodtruck.where(:category => "#{@category}").as_json()
       end
   end
   
@@ -162,7 +162,7 @@ class ClientController < ApplicationController
       @lat = params[:lat]
       @lng = params[:lng]
     
-      render json: Foodtruck.within(0.5, :origin => [@lat, @lng])
+      render :json => Foodtruck.within(0.5, :origin => [@lat, @lng]).as_json()
   end
   
   #======================= 좋아요 푸드트럭 관리 =======================
@@ -285,8 +285,8 @@ class ClientController < ApplicationController
       @festival = Festival.all
       @festival.each { |fesival|
           if festival.title == @data["title"]
-              if festival.status != 3 || festival.status != 4 
-                 #3,4를 제외한 0,1,2일 경우 중복된 행사
+              if festival.status == 0 || festival.status == 1 || festival.status == 2 
+                 #현재 모집 상태가 0,1,2일 경우 중복된 행사
                   render plain: 5 #중복된 행사 모집 공고
                   return
               end
