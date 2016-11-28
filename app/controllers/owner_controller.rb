@@ -56,11 +56,11 @@ class OwnerController < ApplicationController
       @request_info = params[:request_info]
       @data = JSON.parse @request_info
       
-      @owner = Client.find_by(id: @data["owner_id"])
+      @owner = Owner.find_by(id: @data["owner_id"])
       if @owner != nil
-          @update_check = Client.update(params[:owner_id], :email => @data["email"],
-                                                           :phone_number => @data["phone_number"],
-                                                           :business_number => @data["business_number"])
+          @update_check = Owner.update(@data["owner_id"], :email => @data["email"],
+                                                          :phone_number => @data["phone_number"],
+                                                          :business_number => @data["business_number"])
           if @update_check == false
               render plain: 2 #정보 업데이트 실패
           else

@@ -4,6 +4,14 @@ require 'json'
 
 class ClientController < ApplicationController
   
+  def verificationClientID(client_id)
+      @client = Client.find_by(id: client_id)
+      if @client != nil
+          return true
+      else
+          return false
+      end
+  end
   #======================= 회원 정보 관리 =======================
   #회원가입 요청
   def client_join

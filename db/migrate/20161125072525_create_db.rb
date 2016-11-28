@@ -68,7 +68,7 @@ class CreateDb < ActiveRecord::Migration
       
       t.string :email
       t.string :password_digest
-      t.string :phone_number
+      t.string :phone_number, :default => "0"
       t.string :business_number
       
       t.timestamps null: false
