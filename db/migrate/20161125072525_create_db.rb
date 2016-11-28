@@ -86,5 +86,13 @@ class CreateDb < ActiveRecord::Migration
       t.timestamps null: false
     end
     
+    create_table :comments do |t|
+      
+      t.text :content
+      t.belongs_to :review
+      t.belongs_to :owner
+      
+      t.timestamps null: false
+    end
   end
 end
