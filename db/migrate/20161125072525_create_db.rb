@@ -7,7 +7,7 @@ class CreateDb < ActiveRecord::Migration
       t.string :nickName
       t.string :membershipGrade
       t.string :phone_number
-      t.string :image
+      t.string :image,  :default => "1"
       t.float :lat
       t.float :lng
       t.string :token

@@ -58,7 +58,7 @@ class ClientController < ApplicationController
   def upload_image
       @client = Client.find_by(id: params[:client_id])
       @image = params[:image]
-    
+     
       if @client != nil
           @client.image = @image
           render plain: true
@@ -77,10 +77,10 @@ class ClientController < ApplicationController
           @update_check = Client.update(params[:client_id], :email => @data["email"], :nickName => @data["nickName"],
                                                             :phone_number => @data["phone_number"],
                                                             :lat => @data["lat"], :lng => @data["lng"])
-          if @update_check == false
-              render plain: 2 #정보 업데이트 실패
-          else
+          if @update_check.valid?
               render plain: 1 #정보 업데이트 성공
+          else
+              render plain: 2 #정보 업데이트 실패
           end
       else
           render plain: 3 #잘못된 소비자 아이디
@@ -94,7 +94,8 @@ class ClientController < ApplicationController
       if @client != nil
           @password = params[:password]
           @update_check = Client.update(params[:client_id], :password => @password, :password_confirmation => @password)
-          if @update_check == false
+          
+          if @update_check.authenticate(@password) == false
               render plain 2 #비밀번호 변경 실패
           else
               render plain 1 #비밀번호 변경 성공

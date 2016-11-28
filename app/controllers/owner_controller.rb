@@ -20,19 +20,23 @@ class OwnerController < ApplicationController
   end
   
   def truck_info_save
-      @name = params[:name]
-      @category = params[:category]
-      @tag = params[:tag]
-      @payment_card = params[:payment_card]
-      @region = params[:region]
-      @truck_image = params[:truck_image]
-      @owner_id = params[:owner_id]
+      @truck_info = params[:truck_info]
+      @data = JSON.parse @truck_info
       
-      @foodtruck = Foodtruck.new(name: @name, category: @category, tag: @tag, payment_card: @payment_card, region: @region, truck_image: @truck_image, owner_id: @owner_id)
-      if @foodtruck.save
-        render json: @foodtruck
+      @owner = Owner.find_by(id: @data["owner_id"])
+      if @owner != nil
+          @foodtruck = Foodtruck.new(name: @data["name"], category: @data["category"], 
+                                     tag: @data["tag"], payment_card: @data["payment_card"], 
+                                     region: @data["region"], truck_image: @data["t"], 
+                                     owner_id: @owner_id)
+          if @foodtruck.save
+              render plain: true
+              
+          else
+              render plain: false
+          end
       else
-        render json: nil
+          render plain: false
       end
   end
   
@@ -61,24 +65,25 @@ class OwnerController < ApplicationController
           @update_check = Owner.update(@data["owner_id"], :email => @data["email"],
                                                           :phone_number => @data["phone_number"],
                                                           :business_number => @data["business_number"])
-          if @update_check == false
-              render plain: 2 #정보 업데이트 실패
-          else
+          if @update_check.valid?
               render plain: 1 #정보 업데이트 성공
+          else
+              render plain: 2 #정보 업데이트 실패
           end
       else
           render plain: 3 #잘못된 소비자 아이디
       end
   end
   
-  #비밀번호 변경 요청
+    #비밀번호 변경 요청
   def change_password
       @owner = Owner.find_by(id: params[:owner_id])
       
       if @owner != nil
           @password = params[:password]
-          @update_check = Owner.update(params[:owner_id], :password => @password, :password_confirmation => @password)
-          if @update_check == false
+          @passwrod_confirmatinon = params[:passwrod_confirmatinon]
+          @update_check = Owner.update(params[:owner_id], :password => @password, :password_confirmation => @passwrod_confirmatinon)
+          if @update_check.authenticate(@password) == false
               render plain 2 #비밀번호 변경 실패
           else
               render plain 1 #비밀번호 변경 성공
@@ -88,7 +93,7 @@ class OwnerController < ApplicationController
       end
   end
   
-  # 내 푸드트럭 정보 요청
+    #내 푸드트럭 정보 요청
   def mytruck_info
       @owner = Owner.find_by(id: params[:owner_id])
       
@@ -96,6 +101,38 @@ class OwnerController < ApplicationController
           render :json => @owner.foodtruck.as_json()
       else
           render json: nil
+      end
+  end
+  
+  def change_mytruck_info
+      @modify_info = params[:modify_info]
+      @data = JSON.parse @modify_info
+      
+      @update_check = Foodtruck.update(@data["foodtruck_id"], :name => @data["name"], 
+                                                              :category => @data["category"],
+                                                              :tag => @data["tag"], 
+                                                              :payment_card => @data["payment_card"],
+                                                              :region => @data["region"], 
+                                                              :opentime => @data["opentime"],
+                                                              :closetime => @data["closetime"])
+                                                              
+      if @update_check.valid?
+          render :json => @update_check.as_json()
+      else
+          render json: nil
+      end
+  end
+  
+  def upload_truck_image
+      @truck = Foodtruck.find_by(id: params[:foodtruck_id])
+      @image = params[:image]
+      
+      @truck.image = @image
+      
+      if @truck.save
+          render plain: true
+      else
+          render plain: false
       end
   end
   
@@ -108,12 +145,12 @@ class OwnerController < ApplicationController
       if @owner != nil && @festival != nil
           @festival.owners<<@owner
           if @festival.save
-              render :json => @festival.as_json()
+              render plain: true
           else
-              render json: nil
+              render plain: false
           end
       else
-          render json: nil
+          render plain: false
       end
   end
   
@@ -125,17 +162,23 @@ class OwnerController < ApplicationController
       if @owner != nil && @festival != nil
           @owner.festivals.delete(@festival)
           if @owner.save
-              render plain: "true"
+              render plain: true
           else
-              render plain: "false"
+              render plain: false
           end
       else
-          render plain: "false"
+          render plain: false
       end
   end
   
   def selected_festival_info
-    @foodtruck = Foodtruck.find_byparams[:foodtruck_id]
+      @owner = Owner.find_by(id: params[:owner_id])
+    
+      if @owner != nil
+          render json: @owner.festivals
+      else
+          render json: nil
+      end
   end
   
   #======================= 영업 관련 =======================
@@ -149,12 +192,12 @@ class OwnerController < ApplicationController
           @foodtruck.lng = params[:lng]
           if @foodtruck.save
               sendToClientMessage(params[:foodtruck_id])
-              render plain: "true"
+              render plain: true
           else
-              render plain: "false"
+              render plain: false
           end
       else
-          render plain: "false"
+          render plain: false
       end
   end
   

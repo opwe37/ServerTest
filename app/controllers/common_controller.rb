@@ -34,4 +34,15 @@ class CommonController < ApplicationController
             render json: nil
         end
     end
+    
+    def request_ReviewComments
+        @review = Review.find_by(id: params[:review_id])
+        @count = @review.comments.count
+        
+        if @count == 0
+            render json: nil
+        else
+            render json: @review.comments
+        end
+    end
 end

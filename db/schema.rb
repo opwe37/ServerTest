@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161127164232) do
+ActiveRecord::Schema.define(version: 20161128182356) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -19,18 +19,26 @@ ActiveRecord::Schema.define(version: 20161127164232) do
     t.string   "nickName"
     t.string   "membershipGrade"
     t.string   "phone_number"
-    t.string   "image"
+    t.string   "image",           default: "1"
     t.float    "lat"
     t.float    "lng"
     t.string   "token"
     t.integer  "foodtruck_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "clients_foodtrucks", id: false, force: :cascade do |t|
     t.integer "client_id",    null: false
     t.integer "foodtruck_id", null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "review_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "owner_id"
   end
 
   create_table "festivals", force: :cascade do |t|
