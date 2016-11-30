@@ -15,7 +15,7 @@ class OwnerController < ApplicationController
               render plain: 2
           end
       else
-          render plain: 3 
+          render plain: 3
       end
   end
   

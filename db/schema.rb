@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161128182356) do
+ActiveRecord::Schema.define(version: 20161129131057) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20161128182356) do
     t.string   "name"
     t.integer  "category"
     t.string   "tag"
-    t.float    "rating"
+    t.float    "rating",       default: 0.0
     t.boolean  "open"
     t.boolean  "payment_card"
     t.string   "region"
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 20161128182356) do
     t.float    "lng"
     t.integer  "client_id"
     t.integer  "owner_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "opetime"
     t.string   "closetime"
   end
