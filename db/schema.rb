@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129131057) do
+ActiveRecord::Schema.define(version: 20161130102951) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "email"
@@ -24,8 +24,9 @@ ActiveRecord::Schema.define(version: 20161129131057) do
     t.float    "lng"
     t.string   "token"
     t.integer  "foodtruck_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "fcm_alam",        default: false
   end
 
   create_table "clients_foodtrucks", id: false, force: :cascade do |t|

@@ -27,8 +27,8 @@ class OwnerController < ApplicationController
       if @owner != nil
           @foodtruck = Foodtruck.new(name: @data["name"], category: @data["category"], 
                                      tag: @data["tag"], payment_card: @data["payment_card"], 
-                                     region: @data["region"], truck_image: @data["t"], 
-                                     owner_id: @owner_id)
+                                     region: @data["region"], truck_image: params[:image], 
+                                     owner_id: @data["owner_id"])
           if @foodtruck.save
               render plain: true
               
@@ -188,10 +188,7 @@ class OwnerController < ApplicationController
     
       if @foodtruck != nil
           @foodtruck.open = true
-          @foodtruck.lat = params[:lat]
-          @foodtruck.lng = params[:lng]
           if @foodtruck.save
-              sendToClientMessage(params[:foodtruck_id])
               render plain: true
           else
               render plain: false
@@ -210,6 +207,22 @@ class OwnerController < ApplicationController
           @foodtruck.lat = nil
           @foodtruck.lng = nil
           if @foodtruck.save
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
+  end
+  
+  def set_location
+      @id = params[:foodtruck_id]
+      @foodtruck = Foodtruck.find_by(id: @id)
+      if @foodtruck != nil
+          @update_check = Foodtruck.update(@id, :lat => params[:lat], :lng => params[:lng])
+          if @update_chekc.valid?
+              sendToClientMessage(@id)
               render plain: true
           else
               render plain: false
@@ -280,13 +293,18 @@ class OwnerController < ApplicationController
       if @foodtruck != nil
           @client_list = @foodtruck.clients
           @fcm_list = @client_list.within(0.5, :origin => [@foodtruck.lat, @foodtruck.lng])
+                     ta             .where(:fcm_alam => true)
           @token_list = Array.new()
           
-          @fcm_list.each { |client|
-              @token_list.push(client.token)
-          }
+          if @fcm_list == nil
+            return
+          else
+            @fcm_list.each { |client|
+                @token_list.push(client.token)
+            }
           
-          sendfcm(@token_list)
+            sendfcm(@token_list)
+          end
       end
   end
   

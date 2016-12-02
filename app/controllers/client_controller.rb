@@ -286,13 +286,13 @@ class ClientController < ApplicationController
   #======================= 행사 =======================
   #행사 공고 요청
   def save_festival
-      @image = params[:festival_image]
+      @image = params[:image]
       @festival_info = params[:festival_info]
       @data = JSON.parse @festival_info
         
         #행사 중복 여부 체크
       @festival = Festival.all
-      @festival.each { |fesival|
+      @festival.each { |festival|
           if festival.title == @data["title"]
               if festival.status == 0 || festival.status == 1 || festival.status == 2 
                  #현재 모집 상태가 0,1,2일 경우 중복된 행사
@@ -303,8 +303,8 @@ class ClientController < ApplicationController
       }
       
         #요청자 아이디 유효성 체크
-      @client = Client.find_by(id: params[:client_id])
-      if @client_id == nil
+      @client = Client.find_by(id: @data["client_id"])
+      if @client == nil
           render plain: 4 #잘못된 소비자 아이디
           return
       end
@@ -314,11 +314,12 @@ class ClientController < ApplicationController
           render plain: 3 #행사 날짜가 잘못 입력되었음
           return
       else
-          @festvial = Festival.new(title: @data["title"], place: @data["place"],
+          @festival = Festival.new(title: @data["title"], place: @data["place"],
                                    applicant_start: @data["applicant_start"], applicant_end: @data["applicant_end"],
                                    start_date: @data["start_date"], end_date: @data["end_date"],
                                    client_id: @data["client_id"], support_type: @data["support_type"],
-                                   condition: @data["condition"], limit_num_of_application: @data["limit_num_of_application"])
+                                   condition: @data["condition"], limit_num_of_application: @data["limit_num_of_application"],
+                                   image: @image)
       
           if @data["start_date"] > DateTime.now
               @festival.status = 0
@@ -326,7 +327,7 @@ class ClientController < ApplicationController
               @festival.status = 1
           end
       
-          if @festvial.save
+          if @festival.save
               render plain: 1 #저장 성공
           else
               render plain: 2 #저장 실패

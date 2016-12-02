@@ -39,7 +39,7 @@ class CreateDb < ActiveRecord::Migration
       t.string :name
       t.integer :category
       t.string :tag
-      t.float :rating
+      t.float :rating, :default => "0"
       t.boolean :open
       t.boolean :payment_card
       t.string :region

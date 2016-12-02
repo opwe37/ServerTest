@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get   'owner/delete_menu'
   get   'owner/set_open'                #=> 'owner#set_open'
   get   'owner/set_close'               #=> 'owner#set_close'
+  get   'owner/set_location'            #=> 'owner#set_location'
   get   'owner/changeOwnerInfo'         #=> 'owner#changeOwnerInfo'
   get   'owner/change_password'         #=> 'owner#change_password'
   
