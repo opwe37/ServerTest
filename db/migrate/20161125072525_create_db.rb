@@ -11,6 +11,7 @@ class CreateDb < ActiveRecord::Migration
       t.float :lat
       t.float :lng
       t.string :token
+      t.boolean :fcm_alam, :default => true
       t.belongs_to :foodtruck
       
       t.timestamps null: false
@@ -40,7 +41,7 @@ class CreateDb < ActiveRecord::Migration
       t.integer :category
       t.string :tag
       t.float :rating, :default => "0"
-      t.boolean :open
+      t.boolean :open, :dafault => false
       t.boolean :payment_card
       t.string :region
       t.string :image
