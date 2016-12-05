@@ -18,7 +18,7 @@ class ClientController < ApplicationController
       @client_info = params[:client_info]
       @data = JSON.parse @client_info
       
-      @client_check = Clietn.find_by(email: @data["email"])
+      @client_check = Client.find_by(email: @data["email"])
     
       if @client_check == nil
           @new_client = Client.new(email: @data["email"], 
@@ -87,6 +87,20 @@ class ClientController < ApplicationController
       end
   end
   
+  def set_location
+    @id = params[:client_id]
+      @client = Client.find_by(id: @id)
+      if @client != nil
+          @update_check = Client.update(@id, :lat => params[:lat], :lng => params[:lng])
+          if @update_chekc != false
+              render plain: true
+          else
+              render plain: false
+          end
+      else
+          render plain: false
+      end
+  end
   #비밀번호 변경 요청
   def change_password
       @client = Client.find_by(id: params[:client_id])

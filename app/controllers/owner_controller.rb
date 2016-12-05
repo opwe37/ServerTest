@@ -27,7 +27,7 @@ class OwnerController < ApplicationController
       if @owner != nil
           @foodtruck = Foodtruck.new(name: @data["name"], category: @data["category"], 
                                      tag: @data["tag"], payment_card: @data["payment_card"], 
-                                     region: @data["region"], truck_image: params[:image], 
+                                     region: @data["region"], image: params[:image], 
                                      owner_id: @data["owner_id"])
           if @foodtruck.save
               render plain: true
@@ -65,7 +65,7 @@ class OwnerController < ApplicationController
           @update_check = Owner.update(@data["owner_id"], :email => @data["email"],
                                                           :phone_number => @data["phone_number"],
                                                           :business_number => @data["business_number"])
-          if @update_check.valid?
+          if @update_check != nil
               render plain: 1 #정보 업데이트 성공
           else
               render plain: 2 #정보 업데이트 실패
@@ -116,7 +116,7 @@ class OwnerController < ApplicationController
                                                               :opentime => @data["opentime"],
                                                               :closetime => @data["closetime"])
                                                               
-      if @update_check.valid?
+      if @update_check != nil
           render :json => @update_check.as_json()
       else
           render json: nil
@@ -221,7 +221,7 @@ class OwnerController < ApplicationController
       @foodtruck = Foodtruck.find_by(id: @id)
       if @foodtruck != nil
           @update_check = Foodtruck.update(@id, :lat => params[:lat], :lng => params[:lng])
-          if @update_chekc.valid?
+          if @update_chekc != false
               sendToClientMessage(@id)
               render plain: true
           else
@@ -254,7 +254,7 @@ class OwnerController < ApplicationController
           @menu = Menu.new(name: @data["name"],
                            price: @data["price"],
                            foodtruck_id: @data["foodtruck_id"],
-                           image: params[:menu_image])
+                           image: params[:image])
           if @menu.save == true
               render plain: true
           else
@@ -293,7 +293,7 @@ class OwnerController < ApplicationController
       if @foodtruck != nil
           @client_list = @foodtruck.clients
           @fcm_list = @client_list.within(0.5, :origin => [@foodtruck.lat, @foodtruck.lng])
-                     ta             .where(:fcm_alam => true)
+                                  #.where(:fcm_alam => true)
           @token_list = Array.new()
           
           if @fcm_list == nil
