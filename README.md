@@ -1,24 +1,15 @@
+# 푸드트럭 알람 App _ Server
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+2016.06 ~ 2016.12 에 수행된 `푸드트럭 알람 App` 프로젝트의 서버 관련 코드
 
+## 프로젝트 개요
 
-Welcome to your Rails project on Cloud9 IDE!
+푸드트럭은 일반 음식점과 달리 이동성이 있기 때문에 소비자가 특정 푸드트럭을 이용하기 위해서는 푸드트럭의 현재 위치를 알아야 한다. 하지만, 현재로서는 푸드트럭의 위치를 알 방법이 없다. 
 
-To get started, just do the following:
+이러한 불편 사항을 해결하기 위해 푸드트럭의 현재 위치를 소비자에게 알려주는 애플리케이션 개발을 목표로 한 프로젝트이다.
 
-1. Run the project with the "Run Project" button in the menu bar on top of the IDE.
-2. Preview your new app by clicking on the URL that appears in the Run panel below (https://server-test-opwe37.c9users.io/).
-
-Happy coding!
-The Cloud9 IDE team
+## 시스템 구조
 
 
-## Support & Documentation
+<p align="center"><img src="https://user-images.githubusercontent.com/18108156/123631858-326f3980-d852-11eb-91d0-c173da836a84.png" width="800"></p>
 
-Visit http://docs.c9.io for support, or to learn more about using Cloud9 IDE. 
-To watch some training videos, visit http://www.youtube.com/user/c9ide
